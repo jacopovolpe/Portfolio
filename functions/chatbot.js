@@ -1,3 +1,4 @@
+// functions/chatbot.js
 exports.handler = async (event, context) => {
     // Verifica che il metodo della richiesta sia POST
     if (event.httpMethod !== "POST") {
@@ -7,12 +8,14 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Ottieni la chiave API dalla variabile d'ambiente
+    // Ottieni la chiave API e il contenuto di my_info dalle variabili d'ambiente
     const apiKey = process.env.GEMINI_KEY;
-    if (!apiKey) {
+    const InfoContent = process.env.MY_INFO;
+
+    if (!apiKey || !InfoContent) {
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: "Chiave API non configurata." }),
+            body: JSON.stringify({ error: "Configurazione mancante: chiave API o informazioni su Jacopo Volpe." }),
         };
     }
 
@@ -28,6 +31,11 @@ exports.handler = async (event, context) => {
             statusCode: 400,
             body: JSON.stringify({ error: "Payload JSON non valido." }),
         };
+    }
+
+    // Aggiungi il contenuto di my_info.txt al prompt
+    if (payload.contents && payload.contents.length > 0 && payload.contents[0].parts && payload.contents[0].parts.length > 0) {
+        payload.contents[0].parts[0].text = `Informazioni sulla persona:\n${InfoContent}\n\nDomanda: ${payload.contents[0].parts[0].text}`;
     }
 
     // Effettua la chiamata API a Gemini
