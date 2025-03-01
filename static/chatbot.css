@@ -1,3 +1,4 @@
+/* Icona del chatbot */
 #chatbot-icon {
     position: fixed;
     bottom: 20px;
@@ -15,7 +16,6 @@
     z-index: 1000;
     border: 3px solid transparent;
     animation: glowRotate 3s infinite ease-in-out;
-    position: relative;
 }
 
 @keyframes glowRotate {
@@ -40,37 +40,6 @@
         transform: rotate(0deg);
     }
 }
-
-#chatbot-icon::before {
-    content: "";
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    width: 106px;
-    height: 106px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    animation: borderClockwise 3s infinite linear;
-}
-
-@keyframes borderClockwise {
-    0% {
-        border-image-source: linear-gradient(0deg, rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0));
-    }
-    25% {
-        border-image-source: linear-gradient(90deg, rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0));
-    }
-    50% {
-        border-image-source: linear-gradient(180deg, rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0));
-    }
-    75% {
-        border-image-source: linear-gradient(270deg, rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0));
-    }
-    100% {
-        border-image-source: linear-gradient(360deg, rgba(52, 152, 219, 0.8), rgba(52, 152, 219, 0));
-    }
-}
-
 
 /* Container del chatbot */
 #chatbot-container {
