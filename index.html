@@ -354,30 +354,6 @@
 
 <script>
 
-async function callGemini(prompt) {
-    const response = await fetch("/.netlify/functions/chatbot", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: prompt,
-                        },
-                    ],
-                },
-            ],
-        }),
-    });
-
-    const data = await response.json();
-    return data.response;
-}
-
-// Esempio di utilizzo
 callGemini("Ciao, chi sei?").then((response) => {
     console.log(response);
 });
