@@ -11,7 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let suggestionsTimeout;
 
     // Testo della prima risposta del bot (presentation)
-    const presentation = "```html <p>Ciao! Sono Jacopo Volpe, laureando in Intelligenza Artificiale all'Università degli Studi di Salerno. Ho conseguito la laurea triennale in Ingegneria Informatica con il massimo dei voti e ora mi sto specializzando nell'ambito dell'Intelligenza Artificiale e Robotica Intelligente. Ho una solida esperienza in programmazione, soprattutto con Python e Spring Boot, e mi occupo di Machine Learning e Deep Learning. Ho lavorato a diversi progetti interessanti, tra cui uno per NTT Data dove ho sviluppato una soluzione basata su microservizi, e altri presso il Mivia Lab dell'Università di Salerno, focalizzati su visione artificiale, robotica cognitiva e elaborazione del linguaggio naturale. Sono appassionato di tecnologia e sempre desideroso di imparare cose nuove!</p> ```";
+    let presentation = "```html <p>Ciao! Sono Jacopo Volpe, laureando in Intelligenza Artificiale all'Università degli Studi di Salerno. Ho conseguito la laurea triennale in Ingegneria Informatica con il massimo dei voti e ora mi sto specializzando nell'ambito dell'Intelligenza Artificiale e Robotica Intelligente. Ho una solida esperienza in programmazione, soprattutto con Python e Spring Boot, e mi occupo di Machine Learning e Deep Learning. Ho lavorato a diversi progetti interessanti, tra cui uno per NTT Data dove ho sviluppato una soluzione basata su microservizi, e altri presso il Mivia Lab dell'Università di Salerno, focalizzati su visione artificiale, robotica cognitiva e elaborazione del linguaggio naturale. Sono appassionato di tecnologia e sempre desideroso di imparare cose nuove!</p> ```";
+
+    // Funzione per "pulire" la risposta da eventuali formattazioni markdown
+    function cleanMarkdown(response) {
+        return response.replace(/```html/g, '')
+                       .replace(/```/g, '')
+                       .trim();
+    }
 
     // Funzione per aggiungere un messaggio (user o bot)
     function addMessage(message, sender) {
@@ -22,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function () {
             messageDiv.innerText = message;
         } else if (sender === 'bot') {
             messageDiv.classList.add('bot-message');
-            // Utilizziamo innerHTML per i messaggi del bot che potrebbero contenere formattazione HTML
-            messageDiv.innerHTML = message;
+            // Puliamo il messaggio dal markdown indesiderato prima di mostrarlo
+            messageDiv.innerHTML = cleanMarkdown(message);
         }
         chatbotMessages.appendChild(messageDiv);
         // Scroll automatico verso l'ultimo messaggio
@@ -102,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Chiama l'API del chatbot per ottenere la risposta
         const response = await callGemini(message);
 
-        // Aggiungi la risposta del bot
+        // Aggiungi la risposta del bot (che verrà pulita tramite cleanMarkdown)
         addMessage(response, 'bot');
     }
 
@@ -144,6 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Aggiungi il messaggio di presentazione del bot al caricamento della pagina
+    // Aggiungi il messaggio di presentazione del bot al caricamento della pagina (pulito dai marker markdown)
     addMessage(presentation, 'bot');
 });
