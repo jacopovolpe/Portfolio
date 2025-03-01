@@ -160,9 +160,7 @@ header.classList.add('scrolled');
 header.classList.remove('scrolled');
 }
 });
-</script>
 
-<script>
 document.addEventListener("DOMContentLoaded", function () {
 const animatedElements = document.querySelectorAll("[data-reanimate]");
 
