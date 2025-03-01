@@ -67,28 +67,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funzione per chiamare l'API del chatbot
     async function callGemini(prompt) {
-        body = JSON.stringify({
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: prompt,
-                        },
-                    ],
+        try {
+            const body = JSON.stringify({
+                contents: [
+                    {
+                        parts: [
+                            { text: prompt }
+                        ]
+                    }
+                ]
+            });
+    
+            const response = await fetch("/.netlify/functions/chatbot", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
                 },
-            ],
-        });
-
-        console.log(body);
-        const response = await fetch("/.netlify/functions/chatbot", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: body,
-        });
-
-        const data = await response.json();
-        return data.response;
+                body: body,
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Errore nella richiesta: ${response.status} ${response.statusText}`);
+            }
+    
+            const data = await response.json();
+            
+            if (!data.response) {
+                throw new Error("Risposta non valida dal chatbot.");
+            }
+    
+            return data.response;
+        } catch (error) {
+            console.error("Errore durante la chiamata al chatbot:", error);
+            return "Si è verificato un errore nel recupero della risposta. Riprova più tardi.";
+        }
     }
+
 });
