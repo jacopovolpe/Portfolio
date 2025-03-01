@@ -1,0 +1,512 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    transition: all 1s ease;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    border: 3px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.contact-info a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.contact-info a:hover {
+    opacity: 0.8;
+}
+
+.fa-linkedin {
+    color: #0a66c2;
+    margin-right: 5px;
+}
+
+/* Nav Menu */
+.nav-menu {
+    margin-top: 40px;
+    width: 100%;
+    padding-top: 15px;
+    border-top: 1px solid #a7a7a7;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #a7a7a7;
+}
+
+.nav-menu a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+    font-size: 1rem;
+    position: relative; /* Necessario per posizionare il pseudo-elemento */
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    left: 50%; /* Inizia dal centro */
+    bottom: 6px;
+    width: 0; /* Inizia con larghezza 0 */
+    height: 1px; /* Altezza della linea */
+    background-color: white; /* Colore della linea */
+    transform: translateX(-50%); /* Centra la linea */
+    transition: width 0.3s ease; /* Animazione della larghezza */
+}
+
+.nav-menu a:hover::after, .nav-menu a.active::after {
+    width: 78%; /* Allarga la linea al 100% */
+}
+
+.nav-menu a:hover, .nav-menu a.active {
+    text-shadow: 0 10px 15px rgba(255, 255, 255, 0.35); /* Ombra al testo */
+    color:#3498db;
+}
+
+
+
+
+/* Sezioni principali */
+.section {
+    background: white;
+    margin: 20px 0;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.section.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+/* Grid Layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Competenze */
+.skill-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.skill-item div {
+    width: 100%;
+}
+
+.skill-icon {
+    font-size: 1.5rem;
+    color: #3498db;
+    margin-right: 15px;
+    width: 30px;
+    text-align: center;
+}
+
+.skill-bar {
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.skill-progress {
+    height: 100%;
+    background: #3498db;
+    border-radius: 4px;
+    animation: progressAnimation 2s ease-out forwards;
+}
+
+@keyframes progressAnimation {
+    from {
+        width: 0;
+    }
+}
+
+#language-bar {
+    margin-top:22px;
+    background-color: rgba(255, 255, 255, 0.95); /* Sfondo leggermente più opaco */
+    padding: 8px 10px; /* Maggiore spaziatura interna */
+    border-radius: 15px; /* Angoli più arrotondati */
+    font-size: 15px; /* Dimensione del testo ingrandita */
+    z-index: 1000; /* Assicurati che sia sopra ad altri elementi */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Ombra più pronunciata */
+    text-align:right;
+}
+
+@keyframes gentleShake {
+    0% {
+        transform: translateX(0) rotate(0deg);
+    }
+    20% {
+        transform: translateX(-2px) rotate(-2deg);
+    }
+    40% {
+        transform: translateX(2px) rotate(2deg);
+    }
+    60% {
+        transform: translateX(-2px) rotate(-2deg);
+    }
+    80% {
+        transform: translateX(2px) rotate(2deg);
+    }
+    100% {
+        transform: translateX(0) rotate(0deg);
+    }
+}
+
+
+
+.language-bar-shake {
+    animation: gentleShake 2s ease-in-out; /* Durata e ripetizione */
+}
+
+#language-bar img {
+    width: 30px; /* Larghezza aumentata delle bandiere */
+    height: auto; /* Mantieni le proporzioni */
+    vertical-align: middle; /* Allinea verticalmente le immagini */
+    cursor: pointer; /* Cambia il cursore quando ci passi sopra */
+}
+
+#language-bar a {
+    text-decoration: none; /* Rimuovi la sottolineatura dai link */
+}
+
+#language-bar a.active img  {
+    border: 3px solid var(black); /* Colore principale per il bordo */
+    border-radius: 5px; /* Angoli arrotondati per il bordo */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Ombra per evidenziare */
+    background-color:gray;
+}
+
+
+#language-bar a.disactive img {
+    opacity:0.5;
+}
+
+/* Esperienze */
+.timeline {
+    border-left: 2px solid #3498db;
+    padding-left: 25px;
+    margin-left: 15px;
+}
+
+.timeline-item {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -32px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    background: #3498db;
+    border-radius: 50%;
+}
+
+.timeline-item ul {
+    margin-left: 2rem;
+}
+
+/* Logo e informazioni */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+small.info {
+    font-size: 0.8em;
+    color: #666;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.company-logo,
+.instruction-logo {
+    height: 35px;
+    width: auto;
+    max-width: 100px;
+    object-fit: contain;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #2c3e50;
+    color: white;
+    margin-top: 2rem;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+     .pc-only{
+        display:none;
+    }
+    .mobile-only{
+        display:;
+    }
+    .container {
+        padding: 10px;
+    }
+
+    .section {
+        padding: 20px;
+    }
+
+    .header {
+        padding: 1.5rem;
+    }
+
+    .profile-img {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pc-only{
+        display:none;
+    }
+    .mobile-only{
+        display:;
+    }
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .company-logo,
+    .instruction-logo {
+        height: 25px;
+    }
+
+    .nav-menu {
+        display: none;
+    }
+
+    #language-bar {
+        position: absolute;
+        top: 0px;
+        right: 7px;
+        margin-top: 0;
+        padding: 6px 8px;
+        border-radius: 0 0 10px 10px;
+        font-size: 14px;
+         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* Stile per l'header ridotto su dispositivi mobili */
+    .header.scrolled {
+        height: 100px; /* Altezza ridotta */
+        padding: 9px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: #2c3e50;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: all 1s ease;
+    }
+
+    .header.scrolled .profile-img {
+        width: 75px;
+        height: 75px;
+        margin-bottom: 0;
+        position: absolute;
+        left: 15px;
+        top: 10px;
+        border: 2px solid white;
+    }
+
+    .header.scrolled h1 {
+        font-size: 1.2rem;
+        margin: 0;
+        text-align: left;
+        position: relative;
+        top: 10px;
+        left: 110px;
+    }
+
+    .header.scrolled p {
+        position: relative;
+        top: 10px;
+        left: 40px;
+    }
+
+    .header.scrolled .contact-info,
+    .header.scrolled .nav-menu {
+        display: none;
+    }
+
+    .header.scrolled .language-bar {
+        display: none;
+    }
+
+}
+
+/* Stile per il layout desktop  */
+@media (min-width: 1024px) {
+    .pc-only{
+        display:;
+    }
+    .mobile-only{
+        display:none;
+    }
+
+    body {
+        display: flex;
+    }
+
+    .header {
+        width: 320px;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: #2c3e50;
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding-top: 30px;
+    }
+
+   footer {
+        margin-top: 0px;
+        padding-top: 50px;
+        text-align: center;
+        background-color: #2c3e50;
+        color: white;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        display: flex; /* Abilita flexbox */
+        align-items: flex-end; /* Allinea il contenuto in basso */
+        justify-content: center; /* Centra il contenuto orizzontalmente */
+        min-height: 150px; /* Altezza minima del footer (puoi regolarlo) */
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .profile-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .contact-info {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .container {
+        margin-left: 320px;
+        width: 100%;
+        padding: 25px;
+    }
+}
+/* Animazione per dispositivi mobile */
+@media (max-width: 768px) {
+    .header {
+        animation: mobileGlow 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes mobileGlow {
+        0% {
+            box-shadow:
+                        0 0 10px rgba(0, 255, 255, 0.3),
+                        0 0 15px rgba(0, 255, 255, 0.2);
+        }
+        50% {
+            box-shadow:
+                        0 0 15px rgba(0, 255, 255, 0.5),
+                        0 0 25px rgba(0, 255, 255, 0.4);
+        }
+        100% {
+            box-shadow:
+                        0 0 10px rgba(0, 255, 255, 0.3),
+                        0 0 15px rgba(0, 255, 255, 0.2);
+        }
+    }
+}
+
+/* Animazione per dispositivi desktop */
+@media (min-width: 769px) {
+    .header {
+        animation: desktopGlow 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes desktopGlow {
+        0% {
+            box-shadow:
+                        0 0 15px rgba(0, 255, 255, 0.5),
+                        0 0 25px rgba(0, 255, 255, 0.4);
+        }
+        50% {
+            box-shadow:
+                        0 0 25px rgba(0, 255, 255, 0.8),
+                        0 0 40px rgba(0, 255, 255, 0.6);
+        }
+        100% {
+            box-shadow:
+                        0 0 15px rgba(0, 255, 255, 0.5),
+                        0 0 25px rgba(0, 255, 255, 0.4);
+        }
+    }
+}
