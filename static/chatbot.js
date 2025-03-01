@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Crea e aggiungi la risposta del chatbot con animazione
         const botMessage = document.createElement('div');
         botMessage.className = 'message bot-message';
-        botMessage.innerText = response;
+        botMessage.innerHTML = response;
         chatbotMessages.appendChild(botMessage);
 
         // Scrolla nuovamente verso il basso per mostrare l'ultimo messaggio
