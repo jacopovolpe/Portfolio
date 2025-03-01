@@ -104,3 +104,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+
+
+callGemini("Ciao, chi sei?").then((response) => {
+    console.log(response);
+});
