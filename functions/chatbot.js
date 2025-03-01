@@ -33,10 +33,32 @@ exports.handler = async (event, context) => {
         };
     }
 
-    // Aggiungi il contenuto di my_info.txt al prompt
-    if (payload.contents && payload.contents.length > 0 && payload.contents[0].parts && payload.contents[0].parts.length > 0) {
-        payload.contents[0].parts[0].text = `Informazioni sulla persona:\n${InfoContent}\n\nDomanda: ${payload.contents[0].parts[0].text}`;
+    // Verifica che il payload contenga il campo contents
+    if (payload.contents?.length > 0 && payload.contents[0].parts?.length > 0) {
+        const question = payload.contents[0].parts[0].text;
+        
+        // Chiedi al modello di determinare la lingua
+        let responseIntro = `Determina la lingua della domanda e rispondi nello stesso idioma.
+        Se la domanda è in italiano, rispondi in prima persona, in modo naturale e cortese.
+        Se la domanda è in inglese, rispondi in first person, naturally and politely.`;
+        
+        payload.contents[0].parts[0].text = `
+            Ti fornisco alcune informazioni su di me in modo che tu possa rispondere come se fossi io.
+            
+            Informazioni personali:
+            ${InfoContent}
+            
+            ${responseIntro}
+            
+            Domanda: ${question}
+        `;
+        
+        // Formatta elenchi e tabelle in HTML
+        if (/\n- |\n\d+\. |\|/.test(InfoContent)) {
+            payload.contents[0].parts[0].text += "\n\nRisposta in formato HTML:";
+        }
     }
+    
 
     // Effettua la chiamata API a Gemini
     try {
