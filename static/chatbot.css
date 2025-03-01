@@ -5,8 +5,8 @@
     right: 20px;
     background-color: #3498db;
     color: white;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -14,6 +14,31 @@
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+    border: 3px solid transparent;
+    animation: glowRotate 3s infinite ease-in-out;
+}
+
+@keyframes glowRotate {
+    0% {
+        border-color: rgba(52, 152, 219, 0.2);
+        box-shadow: 0 0 10px rgba(52, 152, 219, 0.4);
+        transform: rotate(0deg);
+    }
+    30% {
+        border-color: rgba(52, 152, 219, 0.8);
+        box-shadow: 0 0 20px rgba(52, 152, 219, 0.6);
+        transform: rotate(10deg);
+    }
+    60% {
+        border-color: rgba(52, 152, 219, 0.5);
+        box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+        transform: rotate(-5deg);
+    }
+    100% {
+        border-color: rgba(52, 152, 219, 0.2);
+        box-shadow: 0 0 10px rgba(52, 152, 219, 0.4);
+        transform: rotate(0deg);
+    }
 }
 
 /* Container del chatbot */
@@ -25,7 +50,7 @@
     max-height: 80%;
     overflow-x: hidden;
     overflow-y: auto;
-    
+
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -138,6 +163,11 @@
         width: 90%;
         right: 5%;
         bottom: 70px;
+    }
+
+    #chatbot-icon {
+        width: 50px;
+        height: 50px;
     }
 }
 
