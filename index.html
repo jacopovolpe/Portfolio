@@ -53,30 +53,39 @@
         </div>
     </header>
 
+    <!-- Chatbot -->
     <section id="chatbot">
         <div id="chatbot-icon">
             <i class="fas fa-robot"></i>
         </div>
         <div id="chatbot-container">
             <div id="chatbot-header">
-                <h3>Chatbot</h3>
+                <h3 data-lang="it">Chiedi di me</h3>
+                <h3 data-lang="en">Ask about me</h3>
                 <button id="close-chatbot">&times;</button>
             </div>
             <div id="chatbot-body">
                 <div id="chatbot-messages"></div>
                 <div id="chatbot-suggestions">
-                    <p>Ecco alcune domande che potresti voler fare:</p>
-                    <button class="suggestion-btn">Qual è la tua esperienza con il Machine Learning?</button>
-                    <button class="suggestion-btn">Puoi parlarmi dei tuoi progetti?</button>
-                    <button class="suggestion-btn">Quali sono le tue competenze tecniche?</button>
+                    <p data-lang="it">Ecco alcune domande che potresti voler fare:</p>
+                    <p data-lang="en">Here are some questions you might want to ask:</p>
+                    <button class="suggestion-btn" data-lang="it">Qual è la tua esperienza con il Machine Learning?</button>
+                    <button class="suggestion-btn" data-lang="en">What is your experience with Machine Learning?</button>
+                    <button class="suggestion-btn" data-lang="it">Puoi parlarmi dei tuoi progetti?</button>
+                    <button class="suggestion-btn" data-lang="en">Can you tell me about your projects?</button>
+                    <button class="suggestion-btn" data-lang="it">Quali sono le tue competenze tecniche?</button>
+                    <button class="suggestion-btn" data-lang="en">What are your technical skills?</button>
                 </div>
             </div>
             <div id="chatbot-input">
-                <input type="text" id="chatbot-input-field" placeholder="Scrivi un messaggio...">
+                <input type="text" id="chatbot-input-field" placeholder="Scrivi un messaggio..." data-lang="it">
+                <input type="text" id="chatbot-input-field" placeholder="Type a message..." data-lang="en">
                 <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </section>
+
+
     <main class="container">
         <!-- Sezione Formazione -->
         <section class="section" data-reanimate  id="formazione">
