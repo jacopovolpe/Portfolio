@@ -67,22 +67,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funzione per chiamare l'API del chatbot
     async function callGemini(prompt) {
+        body = JSON.stringify({
+            contents: [
+                {
+                    parts: [
+                        {
+                            text: prompt,
+                        },
+                    ],
+                },
+            ],
+        });
+
+        console.log(body);
         const response = await fetch("/.netlify/functions/chatbot", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [
-                            {
-                                text: prompt,
-                            },
-                        ],
-                    },
-                ],
-            }),
+            body: body,
         });
 
         const data = await response.json();
