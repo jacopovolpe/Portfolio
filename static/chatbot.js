@@ -10,6 +10,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let suggestionsTimeout;
 
+    // Testo della prima risposta del bot (presentation)
+    const presentation = "```html <p>Ciao! Sono Jacopo Volpe, laureando in Intelligenza Artificiale all'Università degli Studi di Salerno. Ho conseguito la laurea triennale in Ingegneria Informatica con il massimo dei voti e ora mi sto specializzando nell'ambito dell'Intelligenza Artificiale e Robotica Intelligente. Ho una solida esperienza in programmazione, soprattutto con Python e Spring Boot, e mi occupo di Machine Learning e Deep Learning. Ho lavorato a diversi progetti interessanti, tra cui uno per NTT Data dove ho sviluppato una soluzione basata su microservizi, e altri presso il Mivia Lab dell'Università di Salerno, focalizzati su visione artificiale, robotica cognitiva e elaborazione del linguaggio naturale. Sono appassionato di tecnologia e sempre desideroso di imparare cose nuove!</p> ```";
+
+    // Funzione per aggiungere un messaggio (user o bot)
+    function addMessage(message, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        if (sender === 'user') {
+            messageDiv.classList.add('user-message');
+            messageDiv.innerText = message;
+        } else if (sender === 'bot') {
+            messageDiv.classList.add('bot-message');
+            // Utilizziamo innerHTML per i messaggi del bot che potrebbero contenere formattazione HTML
+            messageDiv.innerHTML = message;
+        }
+        chatbotMessages.appendChild(messageDiv);
+        // Scroll automatico verso l'ultimo messaggio
+        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+    }
+
     // Funzioni per nascondere/mostrare i suggerimenti con animazione
     function hideSuggestions() {
         chatbotSuggestions.classList.add('hidden');
@@ -21,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function resetSuggestionsTimer() {
         clearTimeout(suggestionsTimeout);
-        // Se sono nascosti, dopo 15 secondi li riappare con un effetto di fade-in
+        // Dopo 15 secondi, se non viene inviato un nuovo messaggio, i suggerimenti riappaiono con effetto fade-in
         suggestionsTimeout = setTimeout(() => {
             showSuggestions();
         }, 15000);
@@ -30,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Apri/chiudi il chatbot
     chatbotIcon.addEventListener('click', () => {
         chatbotContainer.style.display = 'flex';
-        // Applichiamo una leggera animazione di slide quando il container viene mostrato
         chatbotContainer.classList.add('slide-in');
         setTimeout(() => {
             chatbotContainer.classList.remove('slide-in');
@@ -49,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Invia una domanda quando si preme il pulsante di invio
+    // Associa sendMessage al click sul bottone
     sendButton.addEventListener('click', () => {
         const question = chatbotInputField.value;
         if (question.trim() !== '') {
@@ -58,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Invia una domanda quando si preme "Invio" nella casella di testo
+    // Associa sendMessage al tasto "Enter"
     chatbotInputField.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const question = chatbotInputField.value;
@@ -69,35 +88,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Funzione per inviare un messaggio e ricevere una risposta
+    // Funzione per inviare un messaggio e gestire la risposta del bot
     async function sendMessage(message) {
-        // Nascondi i suggerimenti appena viene inviata la prima domanda
+        // Nascondi i suggerimenti se visibili e ripristina il timer per riapparirli dopo 15 secondi
         if (!chatbotSuggestions.classList.contains('hidden')) {
             hideSuggestions();
         }
-        // Ripristina il timer per riapparire i suggerimenti dopo 15 secondi di inattività
         resetSuggestionsTimer();
 
-        // Crea e aggiungi il messaggio dell'utente con un'animazione di fade-in
-        const userMessage = document.createElement('div');
-        userMessage.className = 'message user-message';
-        userMessage.innerText = message;
-        chatbotMessages.appendChild(userMessage);
+        // Aggiungi il messaggio dell'utente
+        addMessage(message, 'user');
 
-        // Scorri verso il basso con effetto smooth (CSS gestisce lo smooth scrolling)
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-
-        // Chiamata all'API del chatbot
+        // Chiama l'API del chatbot per ottenere la risposta
         const response = await callGemini(message);
 
-        // Crea e aggiungi la risposta del chatbot con animazione
-        const botMessage = document.createElement('div');
-        botMessage.className = 'message bot-message';
-        botMessage.innerHTML = response;
-        chatbotMessages.appendChild(botMessage);
-
-        // Scrolla nuovamente verso il basso per mostrare l'ultimo messaggio
-        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        // Aggiungi la risposta del bot
+        addMessage(response, 'bot');
     }
 
     // Funzione per chiamare l'API del chatbot
@@ -126,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const data = await response.json();
-            
+
             if (!data.response) {
                 throw new Error("Risposta non valida dal chatbot.");
             }
@@ -138,8 +144,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Chiamata iniziale di test
-    callGemini("Ciao, chi sei?").then((response) => {
-        console.log(response);
-    });
+    // Aggiungi il messaggio di presentazione del bot al caricamento della pagina
+    addMessage(presentation, 'bot');
 });
