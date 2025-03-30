@@ -67,12 +67,10 @@ exports.handler = async (event, context) => {
             ${responseIntro}
             
             Domanda: ${question}
+
+            ! DAMMI LA RISPOSTA IN FORMATO HTML.
         `;
         
-        // Formatta elenchi e tabelle in HTML
-        if (/\n- |\n\d+\. |\|/.test(InfoContent)) {
-            payload.contents[0].parts[0].text += "\n\nRisposta in formato HTML:";
-        }
     }
     
 
