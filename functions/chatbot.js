@@ -53,12 +53,12 @@ exports.handler = async (event, context) => {
             Informazioni personali:
                 ...
                 <document>
-                    <type>Report</type>
-                    <link>doc/TirocinioTriennale_JacopoVolpe.pdf</link>
+                    <type>Nome</type>
+                    <link>path_relativo</link>
                 </document> 
                 ...
             Ripsondi:
-                puoi scaricare il <a href="doc/TirocinioTriennale_JacopoVolpe.pdf">Report</a> qui.
+                puoi scaricare il <a href="path_relativo">Nome</a> qui.
 
 
 
@@ -69,7 +69,9 @@ exports.handler = async (event, context) => {
             
             Domanda: ${question}
 
-            ! DAMMI LA RISPOSTA IN FORMATO HTML.
+            - DAMMI LA RISPOSTA IN FORMATO HTML DIV.
+            - NON AGGIUNGERE INTRODUZIONI ALLA RISPOSTA.
+            - NON AGGIUNGERE CONCLUSIONI ALLA RISPOSTA.
         `;
         
     }
