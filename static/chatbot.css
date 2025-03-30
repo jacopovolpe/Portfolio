@@ -215,3 +215,12 @@ ul.external {
     gap: 8px;
     font-size: 18px;
 }
+
+ul.external li a i {
+    margin-right: 6px;
+}
+
+ul.external li a {
+    color: black;
+    text-decoration: none;
+}
