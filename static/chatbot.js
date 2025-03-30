@@ -95,50 +95,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Invia messaggio
-    function sendMessage() {
-        const message = inputField.value.trim();
-        if (message) {
-            addMessage(message, 'user');
-            inputField.value = '';
-            
-            // Mostra lo stato di caricamento
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message loading';
-            loadingDiv.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
-            messagesContainer.appendChild(loadingDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            
-            // Invia la richiesta al backend
-            fetch('/.netlify/functions/chatbot', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: message
-                        }]
-                    }]
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Rimuove lo stato di caricamento
-                messagesContainer.removeChild(loadingDiv);
-                
-                if (data.error) {
-                    addMessage(`Errore: ${data.error}`, 'error');
-                } else {
-                    addMessage(data.response, 'bot');
-                }
-            })
-            .catch(error => {
-                messagesContainer.removeChild(loadingDiv);
-                addMessage(`Errore di connessione: ${error.message}`, 'error');
-            });
+    // Funzione per inviare un messaggio e gestire la risposta del bot
+    async function sendMessage(message) {
+        // Nascondi i suggerimenti se visibili e ripristina il timer per riapparirli dopo 15 secondi
+        if (!chatbotSuggestions.classList.contains('hidden')) {
+            hideSuggestions();
         }
+        resetSuggestionsTimer();
+
+        // Aggiungi il messaggio dell'utente
+        addMessage(message, 'user');
+
+        // Chiama l'API del chatbot per ottenere la risposta
+        const response = await callGemini(message);
+
+        // Aggiungi la risposta del bot (che verrà pulita tramite cleanMarkdown)
+        addMessage(response, 'bot');
     }
 
     // Funzione per chiamare l'API del chatbot
