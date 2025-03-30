@@ -45,9 +45,21 @@ exports.handler = async (event, context) => {
         payload.contents[0].parts[0].text = `
             Ti fornisco alcune informazioni su di me in modo che tu possa rispondere come se fossi io.
             Se attinente alla domanda, elogia i miei punti di forza e le mie capacità.
-            Non far nessun riferimento al coefficiente <level> presente nelle informazioni che ti ho fornito.
+            Non far nessun riferimento alla percentuale % <level> presente nelle informazioni che ti ho fornito.
             Non fare riferimento a me come Jacopo Volpe, ma come "io".
             Non fare riferimento a me come Jacopo, ma come "io".
+            I link presenti in <docuemnt> sono tutti relativi alla pagina attuale. 
+            Ad esempio puoi integrarli nella risposta in questo modo:
+            Avendo:
+                <document>
+                    <type>Report</type>
+                    <link>doc/TirocinioTriennale_JacopoVolpe.pdf</link>
+                </document> 
+            Scrivi:
+                puoi scaricare il <a href="doc/TirocinioTriennale_JacopoVolpe.pdf">Report</a> qui.
+
+
+
 
             Informazioni personali:
             ${InfoContent}
