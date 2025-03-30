@@ -20,7 +20,7 @@ exports.handler = async (event, context) => {
     }
 
     // URL dell'API di Gemini
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     // Estrai il payload dalla richiesta
     let payload;
@@ -44,7 +44,11 @@ exports.handler = async (event, context) => {
         
         payload.contents[0].parts[0].text = `
             Ti fornisco alcune informazioni su di me in modo che tu possa rispondere come se fossi io.
-            
+            Se attinente alla domanda, elogia i miei punti di forza e le mie capacità.
+            Non far nessun riferimento al coefficiente <level> presente nelle informazioni che ti ho fornito.
+            Non fare riferimento a me come Jacopo Volpe, ma come "io".
+            Non fare riferimento a me come Jacopo, ma come "io".
+
             Informazioni personali:
             ${InfoContent}
             
