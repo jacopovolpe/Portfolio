@@ -77,6 +77,7 @@ exports.handler = async (event, context) => {
     }
     
     console.log("Payload:", payload);
+    console.log('Prompt: ', payload.contents[0].parts[0].text);
 
     // Effettua la chiamata API a Gemini
     try {
