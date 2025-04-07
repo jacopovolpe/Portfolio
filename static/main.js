@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const targetElement = document.querySelector(targetId);
         if (!targetElement) return;
         
-        const targetPosition = targetElement.getBoundingClientRect().top -5;
+        const targetPosition = targetElement.getBoundingClientRect().top -10;
         
         window.scrollTo({
             top: targetPosition,
@@ -182,24 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     navLinks.forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            const targetId = this.getAttribute('href');
-            
-            // Se siamo già nella sezione, fai un piccolo aggiustamento
-            if (window.location.hash === targetId) {
-                const currentPosition = window.pageYOffset;
-                const targetElement = document.querySelector(targetId);
-                const targetPosition = targetElement.getBoundingClientRect().top + currentPosition;
-                
-                // Solo se siamo già vicini alla posizione, fai un piccolo scroll
-                if (Math.abs(currentPosition - targetPosition) < 50) {
-                    window.scrollTo({
-                        top: targetPosition - 10, // Piccolo offset aggiuntivo
-                        behavior: 'smooth'
-                    });
-                    return;
-                }
-            }
-            
+            const targetId = this.getAttribute('href');                       
             smoothScrollTo(targetId);
         });
     });
