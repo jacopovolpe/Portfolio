@@ -104,7 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const targetElement = document.querySelector(targetId);
         if (!targetElement) return;
         
-        const targetPosition = targetElement.offsetTop - header.offsetHeight + SCROLL_OFFSET;
+        // Calcola la posizione tenendo conto dell'header
+        const headerHeight = header.offsetHeight;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
         
         window.scrollTo({
             top: targetPosition,
@@ -183,10 +185,28 @@ document.addEventListener("DOMContentLoaded", function () {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
+            
+            // Se siamo già nella sezione, fai un piccolo aggiustamento
+            if (window.location.hash === targetId) {
+                const currentPosition = window.pageYOffset;
+                const targetElement = document.querySelector(targetId);
+                const headerHeight = header.offsetHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + currentPosition - headerHeight;
+                
+                // Solo se siamo già vicini alla posizione, fai un piccolo scroll
+                if (Math.abs(currentPosition - targetPosition) < 50) {
+                    window.scrollTo({
+                        top: targetPosition - 10, // Piccolo offset aggiuntivo
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+            }
+            
             smoothScrollTo(targetId);
         });
     });
-    
+        
     // Click sulla barra delle lingue
     document.querySelectorAll('#language-bar a').forEach(link => {
         link.addEventListener('click', function(e) {
