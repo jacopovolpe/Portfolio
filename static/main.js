@@ -104,9 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const targetElement = document.querySelector(targetId);
         if (!targetElement) return;
         
-        // Calcola la posizione tenendo conto dell'header
-        const headerHeight = header.offsetHeight;
-        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
         
         window.scrollTo({
             top: targetPosition,
@@ -190,8 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (window.location.hash === targetId) {
                 const currentPosition = window.pageYOffset;
                 const targetElement = document.querySelector(targetId);
-                const headerHeight = header.offsetHeight;
-                const targetPosition = targetElement.getBoundingClientRect().top + currentPosition - headerHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + currentPosition;
                 
                 // Solo se siamo già vicini alla posizione, fai un piccolo scroll
                 if (Math.abs(currentPosition - targetPosition) < 50) {
