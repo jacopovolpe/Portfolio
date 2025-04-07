@@ -1,19 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Elementi principali
+    /*---------------- VARIABILI E COSTANTI GLOBALI ------------------*/
+    const VISIBILITY_THRESHOLD = 0.3; // 30% della sezione deve essere visibile
+    const HEADER_SCROLL_THRESHOLD = 100;
+    const SCROLL_OFFSET = 10; // Offset in px per lo scroll
+    
+    // Elementi DOM
     const sections = document.querySelectorAll(".section");
     const animatedElements = document.querySelectorAll("[data-reanimate]");
     const header = document.querySelector('.header');
     const navLinks = document.querySelectorAll('.nav-menu a');
     const languageBar = document.getElementById('language-bar');
     
+    // Variabili di stato
     let lastScrollTop = 0;
     let ticking = false;
 
-    // Configurazione
-    const SCROLL_OFFSET = 100; // Offset per il calcolo della sezione attiva
-    const VISIBILITY_THRESHOLD = 0.3; // 30% della sezione deve essere visibile
-
-    // Funzione per verificare se un elemento è visibile nel viewport
+    /*---------------- FUNZIONI DI UTILITÀ ------------------*/
+    
+    /**
+     * Verifica se un elemento è visibile nel viewport
+     * @param {HTMLElement} el - Elemento da verificare
+     * @returns {boolean} True se l'elemento è visibile
+     */
     function isElementVisible(el) {
         const rect = el.getBoundingClientRect();
         const visibilityHeight = rect.height * VISIBILITY_THRESHOLD;
@@ -24,43 +32,19 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-    // Funzione principale per gestire lo scroll
-    function handleScroll() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Gestione header
-        header.classList.toggle('scrolled', scrollTop > 100);
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-
-        // Gestione sezioni attive nel menu
-        const activeSections = new Set();
-        
-        sections.forEach((section, index) => {
-            const sectionId = section.getAttribute('id');
-            
-            // Animazione sezione
-            if (isElementVisible(section)) {
-                section.classList.add("animate");
-                activeSections.add(sectionId);
-            } else {
-                section.classList.remove("animate");
-            }
-        });
-
-        // Aggiorna i link attivi nel menu
-        navLinks.forEach(link => {
-            const targetId = link.getAttribute('href').substring(1);
-            link.classList.toggle('active', activeSections.has(targetId));
-        });
-
-        // Animazione elementi
+    /*---------------- GESTIONE SCROLL E NAVIGAZIONE ------------------*/
+    
+    /**
+     * Gestisce l'animazione degli elementi durante lo scroll
+     */
+    function handleAnimations() {
         animatedElements.forEach(element => {
             if (isElementVisible(element)) {
                 element.classList.add("animate");
                 if (element.classList.contains("skill-progress")) {
                     const targetWidth = element.dataset.originalWidth || element.style.width;
                     element.style.width = "0";
-                    void element.offsetWidth;
+                    void element.offsetWidth; // Trigger reflow
                     element.style.width = targetWidth;
                 }
             } else {
@@ -72,43 +56,71 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
-    // Gestione scroll ottimizzata
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(function() {
-                handleScroll();
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-
-    // Smooth scroll per i link del menu
-    navLinks.forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
+    
+    /**
+     * Gestisce l'evidenziazione delle sezioni attive nel menu
+     */
+    function handleActiveSections() {
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
             
-            if (targetSection) {
-                // Calcola la posizione con offset per l'header
-                const targetPosition = targetSection.offsetTop - header.offsetHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-
-                // Aggiorna manualmente lo stato attivo dopo lo scroll
-                setTimeout(() => {
-                    handleScroll();
-                }, 1000);
+            if (window.scrollY >= sectionTop - 150 && 
+                window.scrollY < sectionTop + sectionHeight - 150) {
+                currentSection = '#' + section.id;
             }
         });
-    });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === currentSection) {
+                link.classList.add('active');
+            }
+        });
+    }
+    
+    /**
+     * Funzione principale per gestire gli eventi di scroll
+     */
+    function handleScroll() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Gestione header scrollato
+        header.classList.toggle('scrolled', scrollTop > HEADER_SCROLL_THRESHOLD);
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        
+        // Gestione animazioni e sezioni attive
+        handleAnimations();
+        handleActiveSections();
+    }
+    
+    /**
+     * Scroll fluido a una sezione con offset
+     * @param {string} targetId - ID della sezione target
+     */
+    function smoothScrollTo(targetId) {
+        const targetElement = document.querySelector(targetId);
+        if (!targetElement) return;
+        
+        const targetPosition = targetElement.offsetTop - header.offsetHeight + SCROLL_OFFSET;
+        
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+        
+        // Aggiorna l'URL senza ricaricare la pagina
+        history.pushState(null, null, targetId);
+    }
 
-    // Gestione cambio lingua
+    /*---------------- GESTIONE LINGUA ------------------*/
+    
+    /**
+     * Cambia la lingua del sito
+     * @param {string} lang - Lingua da impostare ('it' o 'en')
+     */
     function changeLanguage(lang) {
         // Imposta l'attributo lang sul documento
         document.documentElement.setAttribute('data-lang', lang);
@@ -120,15 +132,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Aggiorna lo stato delle lingue
         document.querySelectorAll('#language-bar a').forEach(link => {
-            const isActive = link.id === `len-${lang}`;
+            const isActive = link.id === `lang-${lang}`;
             link.classList.toggle('active', isActive);
             link.classList.toggle('disactive', !isActive);
         });
     }
-
+    
+    /**
+     * Inizializza la lingua in base a URL, localStorage o default
+     */
     function initializeLanguage() {
         const urlParams = new URLSearchParams(window.location.search);
-        const langParam = urlParams.get('len');
+        const langParam = urlParams.get('lang');
         const savedLang = localStorage.getItem('preferredLanguage');
         
         // Determina la lingua da usare (parametro URL > localStorage > default 'en')
@@ -145,12 +160,34 @@ document.addEventListener("DOMContentLoaded", function () {
         // Aggiorna l'URL senza ricaricare
         if (langParam) {
             const url = new URL(window.location);
-            url.searchParams.set('len', lang);
+            url.searchParams.set('lang', lang);
             window.history.replaceState({}, '', url);
         }
     }
 
-    // Eventi per cambio lingua
+    /*---------------- GESTIONE EVENTI ------------------*/
+    
+    // Ottimizzazione dell'evento scroll
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                handleScroll();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+    
+    // Click sui link di navigazione
+    navLinks.forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            smoothScrollTo(targetId);
+        });
+    });
+    
+    // Click sulla barra delle lingue
     document.querySelectorAll('#language-bar a').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -160,12 +197,19 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Aggiorna l'URL
             const url = new URL(window.location);
-            url.searchParams.set('len', lang);
+            url.searchParams.set('lang', lang);
             window.history.pushState({}, '', url);
         });
     });
+    
+    // Gestione del caricamento iniziale con hash nell'URL
+    if (window.location.hash) {
+        setTimeout(() => {
+            smoothScrollTo(window.location.hash);
+        }, 100);
+    }
 
-    // Inizializzazioni
+    /*---------------- INIZIALIZZAZIONE ------------------*/
     initializeLanguage();
-    handleScroll(); // Esegui subito per impostare lo stato iniziale
+    handleScroll(); // Imposta lo stato iniziale
 });
