@@ -340,7 +340,11 @@ footer {
     }
 
     .header {
+        position: fixed;
+        width: 100%;
         padding: 1.5rem;
+        height: 320px;
+        z-index: 10;
     }
 
     .profile-img {
@@ -352,12 +356,15 @@ footer {
     .header.scrolled {
         height: 100px;
         padding: 9px;
-        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         z-index: 1000;
         box-shadow: var(--shadow-md);
+    }
+    
+    .container {
+        padding-top:330px;
     }
 
     .header.scrolled .profile-img {

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     /*---------------- VARIABILI E COSTANTI GLOBALI ------------------*/
-    const VISIBILITY_THRESHOLD = 0.3; // 30% della sezione deve essere visibile
-    const HEADER_SCROLL_THRESHOLD = 100;
+    const VISIBILITY_THRESHOLD = 0.2; // 3sezione deve essere visibile
+    const HEADER_SCROLL_THRESHOLD = 220;
     const SCROLL_OFFSET = 10; // Offset in px per lo scroll
     
     // Elementi DOM
